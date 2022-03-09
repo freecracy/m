@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>task_struct | 嗯哼人生</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    
+    <meta name="description" content="">
+    <meta name="referrer" content="no-referrer">
+    
+    <link rel="preload" href="/m/assets/css/0.styles.1e386fb6.css" as="style"><link rel="preload" href="/m/assets/js/app.71fdaff2.js" as="script"><link rel="preload" href="/m/assets/js/2.351ead77.js" as="script"><link rel="preload" href="/m/assets/js/161.4832768d.js" as="script"><link rel="prefetch" href="/m/assets/js/10.98c1e7e0.js"><link rel="prefetch" href="/m/assets/js/100.d7774ae1.js"><link rel="prefetch" href="/m/assets/js/101.0d4dea0d.js"><link rel="prefetch" href="/m/assets/js/102.6867f859.js"><link rel="prefetch" href="/m/assets/js/103.9d24bd08.js"><link rel="prefetch" href="/m/assets/js/104.4d59f256.js"><link rel="prefetch" href="/m/assets/js/105.ff49af8e.js"><link rel="prefetch" href="/m/assets/js/106.b26c7611.js"><link rel="prefetch" href="/m/assets/js/107.da5be320.js"><link rel="prefetch" href="/m/assets/js/108.0c03f842.js"><link rel="prefetch" href="/m/assets/js/109.5587de24.js"><link rel="prefetch" href="/m/assets/js/11.4e6d88d4.js"><link rel="prefetch" href="/m/assets/js/110.40ae6022.js"><link rel="prefetch" href="/m/assets/js/111.0353ccf3.js"><link rel="prefetch" href="/m/assets/js/112.f562c096.js"><link rel="prefetch" href="/m/assets/js/113.7926c003.js"><link rel="prefetch" href="/m/assets/js/114.356035f0.js"><link rel="prefetch" href="/m/assets/js/115.15e5e23e.js"><link rel="prefetch" href="/m/assets/js/116.2db2b1ed.js"><link rel="prefetch" href="/m/assets/js/117.2658e42c.js"><link rel="prefetch" href="/m/assets/js/118.037a8503.js"><link rel="prefetch" href="/m/assets/js/119.21153540.js"><link rel="prefetch" href="/m/assets/js/12.c3dadd73.js"><link rel="prefetch" href="/m/assets/js/120.b8f0644f.js"><link rel="prefetch" href="/m/assets/js/121.4c1c263a.js"><link rel="prefetch" href="/m/assets/js/122.d6ba18dd.js"><link rel="prefetch" href="/m/assets/js/123.ceef4883.js"><link rel="prefetch" href="/m/assets/js/124.9e5f50ca.js"><link rel="prefetch" href="/m/assets/js/125.de1ddc80.js"><link rel="prefetch" href="/m/assets/js/126.ae350aea.js"><link rel="prefetch" href="/m/assets/js/127.4636f6be.js"><link rel="prefetch" href="/m/assets/js/128.13b379ab.js"><link rel="prefetch" href="/m/assets/js/129.e7b0a15f.js"><link rel="prefetch" href="/m/assets/js/13.a52bd89b.js"><link rel="prefetch" href="/m/assets/js/130.147cdf11.js"><link rel="prefetch" href="/m/assets/js/131.c7a07871.js"><link rel="prefetch" href="/m/assets/js/132.faf72eb9.js"><link rel="prefetch" href="/m/assets/js/133.6301923b.js"><link rel="prefetch" href="/m/assets/js/134.4357c6e4.js"><link rel="prefetch" href="/m/assets/js/135.0ea43a3d.js"><link rel="prefetch" href="/m/assets/js/136.5a7c2377.js"><link rel="prefetch" href="/m/assets/js/137.393c998e.js"><link rel="prefetch" href="/m/assets/js/138.dcf958b6.js"><link rel="prefetch" href="/m/assets/js/139.1ccac68b.js"><link rel="prefetch" href="/m/assets/js/14.96fff293.js"><link rel="prefetch" href="/m/assets/js/140.938c314e.js"><link rel="prefetch" href="/m/assets/js/141.03cc2137.js"><link rel="prefetch" href="/m/assets/js/142.db00aba9.js"><link rel="prefetch" href="/m/assets/js/143.6d7b22af.js"><link rel="prefetch" href="/m/assets/js/144.850ed5a9.js"><link rel="prefetch" href="/m/assets/js/145.a1958a5f.js"><link rel="prefetch" href="/m/assets/js/146.1b350d4f.js"><link rel="prefetch" href="/m/assets/js/147.961f3ccd.js"><link rel="prefetch" href="/m/assets/js/148.cb4f8811.js"><link rel="prefetch" href="/m/assets/js/149.45ad7c2c.js"><link rel="prefetch" href="/m/assets/js/15.c507965f.js"><link rel="prefetch" href="/m/assets/js/150.5d952b70.js"><link rel="prefetch" href="/m/assets/js/151.5c794bb0.js"><link rel="prefetch" href="/m/assets/js/152.974e657e.js"><link rel="prefetch" href="/m/assets/js/153.b7cf98f6.js"><link rel="prefetch" href="/m/assets/js/154.be904394.js"><link rel="prefetch" href="/m/assets/js/155.769e3b0d.js"><link rel="prefetch" href="/m/assets/js/156.6107a44f.js"><link rel="prefetch" href="/m/assets/js/157.0bf74a2b.js"><link rel="prefetch" href="/m/assets/js/158.d499f907.js"><link rel="prefetch" href="/m/assets/js/159.6b2acd2c.js"><link rel="prefetch" href="/m/assets/js/16.247520d0.js"><link rel="prefetch" href="/m/assets/js/160.ec909209.js"><link rel="prefetch" href="/m/assets/js/162.ae74834a.js"><link rel="prefetch" href="/m/assets/js/163.8af51be9.js"><link rel="prefetch" href="/m/assets/js/164.0d64a1ef.js"><link rel="prefetch" href="/m/assets/js/165.5e5a775c.js"><link rel="prefetch" href="/m/assets/js/166.121987f8.js"><link rel="prefetch" href="/m/assets/js/167.1c270942.js"><link rel="prefetch" href="/m/assets/js/168.200df8c8.js"><link rel="prefetch" href="/m/assets/js/169.84f5e0d7.js"><link rel="prefetch" href="/m/assets/js/17.3cb462b5.js"><link rel="prefetch" href="/m/assets/js/170.57b7eec5.js"><link rel="prefetch" href="/m/assets/js/171.d993d636.js"><link rel="prefetch" href="/m/assets/js/172.820d00a1.js"><link rel="prefetch" href="/m/assets/js/173.cc29ff6e.js"><link rel="prefetch" href="/m/assets/js/174.99d62af7.js"><link rel="prefetch" href="/m/assets/js/175.da874148.js"><link rel="prefetch" href="/m/assets/js/176.d0755bfc.js"><link rel="prefetch" href="/m/assets/js/177.8b00d874.js"><link rel="prefetch" href="/m/assets/js/178.2b0cfda8.js"><link rel="prefetch" href="/m/assets/js/179.780a3873.js"><link rel="prefetch" href="/m/assets/js/18.298da910.js"><link rel="prefetch" href="/m/assets/js/180.7c0ac3dc.js"><link rel="prefetch" href="/m/assets/js/181.507f9073.js"><link rel="prefetch" href="/m/assets/js/182.87f76d4a.js"><link rel="prefetch" href="/m/assets/js/183.1410502e.js"><link rel="prefetch" href="/m/assets/js/184.80666cb3.js"><link rel="prefetch" href="/m/assets/js/185.dc628b97.js"><link rel="prefetch" href="/m/assets/js/186.c2560a3f.js"><link rel="prefetch" href="/m/assets/js/187.6af43ea3.js"><link rel="prefetch" href="/m/assets/js/188.da75b50c.js"><link rel="prefetch" href="/m/assets/js/189.78dd960b.js"><link rel="prefetch" href="/m/assets/js/19.d9eabdf8.js"><link rel="prefetch" href="/m/assets/js/190.017586b9.js"><link rel="prefetch" href="/m/assets/js/191.5fa65eb7.js"><link rel="prefetch" href="/m/assets/js/192.5bb628c7.js"><link rel="prefetch" href="/m/assets/js/193.35707c80.js"><link rel="prefetch" href="/m/assets/js/194.35c3b13b.js"><link rel="prefetch" href="/m/assets/js/195.6dc8874b.js"><link rel="prefetch" href="/m/assets/js/196.01a1e825.js"><link rel="prefetch" href="/m/assets/js/197.5745084a.js"><link rel="prefetch" href="/m/assets/js/198.0455ca12.js"><link rel="prefetch" href="/m/assets/js/199.75129c13.js"><link rel="prefetch" href="/m/assets/js/20.ce14ddb9.js"><link rel="prefetch" href="/m/assets/js/200.a08681d0.js"><link rel="prefetch" href="/m/assets/js/201.a54018b7.js"><link rel="prefetch" href="/m/assets/js/202.2361e839.js"><link rel="prefetch" href="/m/assets/js/203.b92491ee.js"><link rel="prefetch" href="/m/assets/js/204.13742571.js"><link rel="prefetch" href="/m/assets/js/205.b066e447.js"><link rel="prefetch" href="/m/assets/js/206.e2c72f2c.js"><link rel="prefetch" href="/m/assets/js/207.09a83a9a.js"><link rel="prefetch" href="/m/assets/js/208.f4b8d71c.js"><link rel="prefetch" href="/m/assets/js/209.1a4e4d18.js"><link rel="prefetch" href="/m/assets/js/21.0dc0e0bf.js"><link rel="prefetch" href="/m/assets/js/210.9709d46f.js"><link rel="prefetch" href="/m/assets/js/211.3704916b.js"><link rel="prefetch" href="/m/assets/js/212.7c96c99f.js"><link rel="prefetch" href="/m/assets/js/213.b4aedaa1.js"><link rel="prefetch" href="/m/assets/js/214.d0b2586b.js"><link rel="prefetch" href="/m/assets/js/215.2268650a.js"><link rel="prefetch" href="/m/assets/js/216.dcaa6f2f.js"><link rel="prefetch" href="/m/assets/js/217.33aaf649.js"><link rel="prefetch" href="/m/assets/js/218.216d8592.js"><link rel="prefetch" href="/m/assets/js/219.44d35873.js"><link rel="prefetch" href="/m/assets/js/22.ce355d8a.js"><link rel="prefetch" href="/m/assets/js/220.ff06fa11.js"><link rel="prefetch" href="/m/assets/js/221.93379b76.js"><link rel="prefetch" href="/m/assets/js/222.6f0bbeea.js"><link rel="prefetch" href="/m/assets/js/223.4c5e29f0.js"><link rel="prefetch" href="/m/assets/js/224.e7be32e4.js"><link rel="prefetch" href="/m/assets/js/225.4915db8f.js"><link rel="prefetch" href="/m/assets/js/226.60f21d11.js"><link rel="prefetch" href="/m/assets/js/227.0e63cf34.js"><link rel="prefetch" href="/m/assets/js/228.e7b7a543.js"><link rel="prefetch" href="/m/assets/js/229.73bf392a.js"><link rel="prefetch" href="/m/assets/js/23.40c917ac.js"><link rel="prefetch" href="/m/assets/js/230.9f789c55.js"><link rel="prefetch" href="/m/assets/js/231.8fd85bc2.js"><link rel="prefetch" href="/m/assets/js/232.e6c4a62c.js"><link rel="prefetch" href="/m/assets/js/233.45636bf3.js"><link rel="prefetch" href="/m/assets/js/234.5194ce16.js"><link rel="prefetch" href="/m/assets/js/235.15ba019b.js"><link rel="prefetch" href="/m/assets/js/236.ac5768c1.js"><link rel="prefetch" href="/m/assets/js/237.91ec2e5a.js"><link rel="prefetch" href="/m/assets/js/238.af630344.js"><link rel="prefetch" href="/m/assets/js/239.b2b84093.js"><link rel="prefetch" href="/m/assets/js/24.5b681006.js"><link rel="prefetch" href="/m/assets/js/240.9c9b1fba.js"><link rel="prefetch" href="/m/assets/js/241.c26c2147.js"><link rel="prefetch" href="/m/assets/js/242.ce44f37f.js"><link rel="prefetch" href="/m/assets/js/243.aa04b829.js"><link rel="prefetch" href="/m/assets/js/244.ee4c9090.js"><link rel="prefetch" href="/m/assets/js/245.62ebda1d.js"><link rel="prefetch" href="/m/assets/js/246.2fd9ce22.js"><link rel="prefetch" href="/m/assets/js/247.52b3e746.js"><link rel="prefetch" href="/m/assets/js/248.2e432a32.js"><link rel="prefetch" href="/m/assets/js/249.4598fccb.js"><link rel="prefetch" href="/m/assets/js/25.d5d6ba55.js"><link rel="prefetch" href="/m/assets/js/250.7c93bc3e.js"><link rel="prefetch" href="/m/assets/js/251.4d402930.js"><link rel="prefetch" href="/m/assets/js/252.1b3fb775.js"><link rel="prefetch" href="/m/assets/js/253.01a9b4f8.js"><link rel="prefetch" href="/m/assets/js/254.29de4256.js"><link rel="prefetch" href="/m/assets/js/255.4911ce12.js"><link rel="prefetch" href="/m/assets/js/256.0a40f8d2.js"><link rel="prefetch" href="/m/assets/js/257.2111ae5e.js"><link rel="prefetch" href="/m/assets/js/258.0e9b2cd1.js"><link rel="prefetch" href="/m/assets/js/259.43158d35.js"><link rel="prefetch" href="/m/assets/js/26.b1e00e8a.js"><link rel="prefetch" href="/m/assets/js/260.72ea8c45.js"><link rel="prefetch" href="/m/assets/js/261.3f679643.js"><link rel="prefetch" href="/m/assets/js/262.d9ecaed6.js"><link rel="prefetch" href="/m/assets/js/27.556976c4.js"><link rel="prefetch" href="/m/assets/js/28.11027d56.js"><link rel="prefetch" href="/m/assets/js/29.f40ac6f5.js"><link rel="prefetch" href="/m/assets/js/3.a2a1a8e5.js"><link rel="prefetch" href="/m/assets/js/30.3b59bb10.js"><link rel="prefetch" href="/m/assets/js/31.c37142be.js"><link rel="prefetch" href="/m/assets/js/32.c5e0d2a0.js"><link rel="prefetch" href="/m/assets/js/33.4f5f3a8d.js"><link rel="prefetch" href="/m/assets/js/34.4a3a9398.js"><link rel="prefetch" href="/m/assets/js/35.77f89f97.js"><link rel="prefetch" href="/m/assets/js/36.6ea00d3c.js"><link rel="prefetch" href="/m/assets/js/37.b5a3b5b4.js"><link rel="prefetch" href="/m/assets/js/38.24b26621.js"><link rel="prefetch" href="/m/assets/js/39.ab372876.js"><link rel="prefetch" href="/m/assets/js/4.b9f14f77.js"><link rel="prefetch" href="/m/assets/js/40.7a81caac.js"><link rel="prefetch" href="/m/assets/js/41.d23cf8c8.js"><link rel="prefetch" href="/m/assets/js/42.ef938986.js"><link rel="prefetch" href="/m/assets/js/43.708a3cf3.js"><link rel="prefetch" href="/m/assets/js/44.f705f7de.js"><link rel="prefetch" href="/m/assets/js/45.0e6afdb6.js"><link rel="prefetch" href="/m/assets/js/46.9815c7cc.js"><link rel="prefetch" href="/m/assets/js/47.5d1c1dcc.js"><link rel="prefetch" href="/m/assets/js/48.d9d571a6.js"><link rel="prefetch" href="/m/assets/js/49.9cbaa1e9.js"><link rel="prefetch" href="/m/assets/js/5.57dbdc35.js"><link rel="prefetch" href="/m/assets/js/50.265f94f4.js"><link rel="prefetch" href="/m/assets/js/51.094b2e7f.js"><link rel="prefetch" href="/m/assets/js/52.8b7101c0.js"><link rel="prefetch" href="/m/assets/js/53.98f3fc0b.js"><link rel="prefetch" href="/m/assets/js/54.b3d830fd.js"><link rel="prefetch" href="/m/assets/js/55.fb9cd8c7.js"><link rel="prefetch" href="/m/assets/js/56.878cf94b.js"><link rel="prefetch" href="/m/assets/js/57.1c819831.js"><link rel="prefetch" href="/m/assets/js/58.ac3faf70.js"><link rel="prefetch" href="/m/assets/js/59.b0483bf9.js"><link rel="prefetch" href="/m/assets/js/6.a0c51186.js"><link rel="prefetch" href="/m/assets/js/60.48c301e6.js"><link rel="prefetch" href="/m/assets/js/61.4bf4f2e7.js"><link rel="prefetch" href="/m/assets/js/62.d927584b.js"><link rel="prefetch" href="/m/assets/js/63.b72a48f3.js"><link rel="prefetch" href="/m/assets/js/64.6923d7c8.js"><link rel="prefetch" href="/m/assets/js/65.042fc335.js"><link rel="prefetch" href="/m/assets/js/66.1afdb278.js"><link rel="prefetch" href="/m/assets/js/67.04f7b0c7.js"><link rel="prefetch" href="/m/assets/js/68.97789db4.js"><link rel="prefetch" href="/m/assets/js/69.d914e9f8.js"><link rel="prefetch" href="/m/assets/js/7.aef5e50f.js"><link rel="prefetch" href="/m/assets/js/70.84845956.js"><link rel="prefetch" href="/m/assets/js/71.d6e9132a.js"><link rel="prefetch" href="/m/assets/js/72.2c1f5783.js"><link rel="prefetch" href="/m/assets/js/73.789e9372.js"><link rel="prefetch" href="/m/assets/js/74.e79f4842.js"><link rel="prefetch" href="/m/assets/js/75.4a389066.js"><link rel="prefetch" href="/m/assets/js/76.f5721f28.js"><link rel="prefetch" href="/m/assets/js/77.e6ce992d.js"><link rel="prefetch" href="/m/assets/js/78.5c31237a.js"><link rel="prefetch" href="/m/assets/js/79.6a4f09e0.js"><link rel="prefetch" href="/m/assets/js/8.aac4a85a.js"><link rel="prefetch" href="/m/assets/js/80.23b925ca.js"><link rel="prefetch" href="/m/assets/js/81.bc8138cb.js"><link rel="prefetch" href="/m/assets/js/82.4783bc83.js"><link rel="prefetch" href="/m/assets/js/83.1be8f057.js"><link rel="prefetch" href="/m/assets/js/84.3132660e.js"><link rel="prefetch" href="/m/assets/js/85.95c5ab8b.js"><link rel="prefetch" href="/m/assets/js/86.17c9a201.js"><link rel="prefetch" href="/m/assets/js/87.daa0da6b.js"><link rel="prefetch" href="/m/assets/js/88.9409cacc.js"><link rel="prefetch" href="/m/assets/js/89.bf04eaa0.js"><link rel="prefetch" href="/m/assets/js/9.0dd0ff11.js"><link rel="prefetch" href="/m/assets/js/90.5e1e2630.js"><link rel="prefetch" href="/m/assets/js/91.6466b581.js"><link rel="prefetch" href="/m/assets/js/92.0dd7ffc6.js"><link rel="prefetch" href="/m/assets/js/93.045047c7.js"><link rel="prefetch" href="/m/assets/js/94.ce06dedb.js"><link rel="prefetch" href="/m/assets/js/95.f673ef28.js"><link rel="prefetch" href="/m/assets/js/96.1f73d13d.js"><link rel="prefetch" href="/m/assets/js/97.b1800fdc.js"><link rel="prefetch" href="/m/assets/js/98.245eb5e4.js"><link rel="prefetch" href="/m/assets/js/99.2cfc78a1.js">
+    <link rel="stylesheet" href="/m/assets/css/0.styles.1e386fb6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/m/" class="home-link router-link-active"><!----> <span class="site-name">嗯哼人生</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/m/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="https://cn100800.tk" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  主站
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><a href="mailto:freecracy1024@gmail.com" class="nav-link external">
+  mail
+  <!----></a></div><div class="nav-item"><a href="https://google.com.hk" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  google
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/m/" class="nav-link">
+  首页
+</a></div><div class="nav-item"><a href="https://cn100800.tk" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  主站
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div><div class="nav-item"><a href="mailto:freecracy1024@gmail.com" class="nav-link external">
+  mail
+  <!----></a></div><div class="nav-item"><a href="https://google.com.hk" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  google
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Go语言之旅</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Redis</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Deno</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>其他</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>周末闲谈</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>深度好文</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>漫步 Linux</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/m/漫步Linux/task_struct.html" class="active sidebar-link">task_struct</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/m/漫步Linux/task_struct.html#task-struct" class="sidebar-link">task_struct</a></li></ul></li><li><a href="/m/漫步Linux/awk.html" class="sidebar-link">awk</a></li><li><a href="/m/漫步Linux/logrotate.html" class="sidebar-link">logrotate</a></li><li><a href="/m/漫步Linux/pageCache.html" class="sidebar-link">pageCache</a></li><li><a href="/m/漫步Linux/sed.html" class="sidebar-link">sed</a></li><li><a href="/m/漫步Linux/shell语法.html" class="sidebar-link">shell语法</a></li><li><a href="/m/漫步Linux/tc模拟弱网.html" class="sidebar-link">tc模拟弱网</a></li><li><a href="/m/漫步Linux/压测.html" class="sidebar-link">压测</a></li><li><a href="/m/漫步Linux/常用命令.html" class="sidebar-link">常用命令</a></li><li><a href="/m/漫步Linux/操作系统.html" class="sidebar-link">操作系统</a></li><li><a href="/m/漫步Linux/系统状态.html" class="sidebar-link">系统状态</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>算法</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>设计模式</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>鸡汤软文</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h2 id="task-struct"><a href="#task-struct" class="header-anchor">#</a> task_struct</h2> <div class="language-c line-numbers-mode"><pre class="language-c"><code><span class="token keyword">struct</span> <span class="token class-name">task_struct</span> <span class="token punctuation">{</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_THREAD_INFO_IN_TASK</span></span>
+	<span class="token comment">/*
+	 * For reasons of header soup (see current_thread_info()), this
+	 * must be the first element of task_struct.
+	 */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">thread_info</span>		thread_info<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token comment">/* -1 unrunnable, 0 runnable, &gt;0 stopped: */</span>
+	<span class="token keyword">volatile</span> <span class="token keyword">long</span>			state<span class="token punctuation">;</span>
+
+	<span class="token comment">/*
+	 * This begins the randomizable portion of task_struct. Only
+	 * scheduling-critical items should be added above here.
+	 */</span>
+	randomized_struct_fields_start
+
+	<span class="token keyword">void</span>				<span class="token operator">*</span>stack<span class="token punctuation">;</span>
+	<span class="token class-name">refcount_t</span>			usage<span class="token punctuation">;</span>
+	<span class="token comment">/* Per task flags (PF_*), defined further below: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			flags<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			ptrace<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_SMP</span></span>
+	<span class="token keyword">int</span>				on_cpu<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">__call_single_node</span>	wake_entry<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_THREAD_INFO_IN_TASK</span></span>
+	<span class="token comment">/* Current CPU: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			cpu<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			wakee_flips<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			wakee_flip_decay_ts<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_struct</span>		<span class="token operator">*</span>last_wakee<span class="token punctuation">;</span>
+
+	<span class="token comment">/*
+	 * recent_used_cpu is initially set as the last CPU used by a task
+	 * that wakes affine another task. Waker/wakee relationships can
+	 * push tasks around a CPU where each wakeup moves to the next one.
+	 * Tracking a recently used CPU allows a quick search for a recently
+	 * used CPU that may be idle.
+	 */</span>
+	<span class="token keyword">int</span>				recent_used_cpu<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				wake_cpu<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token keyword">int</span>				on_rq<span class="token punctuation">;</span>
+
+	<span class="token keyword">int</span>				prio<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				static_prio<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				normal_prio<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			rt_priority<span class="token punctuation">;</span>
+
+	<span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">sched_class</span>	<span class="token operator">*</span>sched_class<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">sched_entity</span>		se<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">sched_rt_entity</span>		rt<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_CGROUP_SCHED</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_group</span>		<span class="token operator">*</span>sched_task_group<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">sched_dl_entity</span>		dl<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_UCLAMP_TASK</span></span>
+	<span class="token comment">/* Clamp values requested for a scheduling entity */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">uclamp_se</span>		uclamp_req<span class="token punctuation">[</span>UCLAMP_CNT<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token comment">/* Effective clamp values used for a scheduling entity */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">uclamp_se</span>		uclamp<span class="token punctuation">[</span>UCLAMP_CNT<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_PREEMPT_NOTIFIERS</span></span>
+	<span class="token comment">/* List of struct preempt_notifier: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">hlist_head</span>		preempt_notifiers<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_BLK_DEV_IO_TRACE</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			btrace_seq<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			policy<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				nr_cpus_allowed<span class="token punctuation">;</span>
+	<span class="token keyword">const</span> <span class="token class-name">cpumask_t</span>			<span class="token operator">*</span>cpus_ptr<span class="token punctuation">;</span>
+	<span class="token class-name">cpumask_t</span>			cpus_mask<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_PREEMPT_RCU</span></span>
+	<span class="token keyword">int</span>				rcu_read_lock_nesting<span class="token punctuation">;</span>
+	<span class="token keyword">union</span> rcu_special		rcu_read_unlock_special<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		rcu_node_entry<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">rcu_node</span>			<span class="token operator">*</span>rcu_blocked_node<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">/* #ifdef CONFIG_PREEMPT_RCU */</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_TASKS_RCU</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			rcu_tasks_nvcsw<span class="token punctuation">;</span>
+	u8				rcu_tasks_holdout<span class="token punctuation">;</span>
+	u8				rcu_tasks_idx<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				rcu_tasks_idle_cpu<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		rcu_tasks_holdout_list<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">/* #ifdef CONFIG_TASKS_RCU */</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_TASKS_TRACE_RCU</span></span>
+	<span class="token keyword">int</span>				trc_reader_nesting<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				trc_ipi_to_cpu<span class="token punctuation">;</span>
+	<span class="token keyword">union</span> rcu_special		trc_reader_special<span class="token punctuation">;</span>
+	bool				trc_reader_checked<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		trc_holdout_list<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">/* #ifdef CONFIG_TASKS_TRACE_RCU */</span></span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">sched_info</span>		sched_info<span class="token punctuation">;</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		tasks<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_SMP</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">plist_node</span>		pushable_tasks<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">rb_node</span>			pushable_dl_tasks<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">mm_struct</span>		<span class="token operator">*</span>mm<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">mm_struct</span>		<span class="token operator">*</span>active_mm<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Per-thread vma caching: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">vmacache</span>			vmacache<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">SPLIT_RSS_COUNTING</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_rss_stat</span>		rss_stat<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token keyword">int</span>				exit_state<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				exit_code<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				exit_signal<span class="token punctuation">;</span>
+	<span class="token comment">/* The signal sent when the parent dies: */</span>
+	<span class="token keyword">int</span>				pdeath_signal<span class="token punctuation">;</span>
+	<span class="token comment">/* JOBCTL_*, siglock protected: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			jobctl<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Used for emulating ABI behavior of previous Linux versions: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			personality<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Scheduler bits, serialized by scheduler locks: */</span>
+	<span class="token keyword">unsigned</span>			sched_reset_on_fork<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span>			sched_contributes_to_load<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span>			sched_migrated<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span>			sched_remote_wakeup<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_PSI</span></span>
+	<span class="token keyword">unsigned</span>			sched_psi_wake_requeue<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+	<span class="token comment">/* Force alignment to the next boundary: */</span>
+	<span class="token keyword">unsigned</span>			<span class="token operator">:</span><span class="token number">0</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/* Unserialized, strictly 'current' */</span>
+
+	<span class="token comment">/* Bit to tell LSMs we're in execve(): */</span>
+	<span class="token keyword">unsigned</span>			in_execve<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span>			in_iowait<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifndef</span> <span class="token expression">TIF_RESTORE_SIGMASK</span></span>
+	<span class="token keyword">unsigned</span>			restore_sigmask<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_MEMCG</span></span>
+	<span class="token keyword">unsigned</span>			in_user_fault<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_COMPAT_BRK</span></span>
+	<span class="token keyword">unsigned</span>			brk_randomized<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_CGROUPS</span></span>
+	<span class="token comment">/* disallow userland-initiated cgroup migration */</span>
+	<span class="token keyword">unsigned</span>			no_cgroup_migration<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token comment">/* task is frozen/stopped (used by the cgroup freezer) */</span>
+	<span class="token keyword">unsigned</span>			frozen<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_BLK_CGROUP</span></span>
+	<span class="token keyword">unsigned</span>			use_memdelay<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_PSI</span></span>
+	<span class="token comment">/* Stalled due to lack of memory */</span>
+	<span class="token keyword">unsigned</span>			in_memstall<span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			atomic_flags<span class="token punctuation">;</span> <span class="token comment">/* Flags requiring atomic access. */</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">restart_block</span>		restart_block<span class="token punctuation">;</span>
+
+	<span class="token class-name">pid_t</span>				pid<span class="token punctuation">;</span>
+	<span class="token class-name">pid_t</span>				tgid<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_STACKPROTECTOR</span></span>
+	<span class="token comment">/* Canary value for the -fstack-protector GCC feature: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			stack_canary<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token comment">/*
+	 * Pointers to the (original) parent process, youngest child, younger sibling,
+	 * older sibling, respectively.  (p-&gt;father can be replaced with
+	 * p-&gt;real_parent-&gt;pid)
+	 */</span>
+
+	<span class="token comment">/* Real parent process: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_struct</span> __rcu	<span class="token operator">*</span>real_parent<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Recipient of SIGCHLD, wait4() reports: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_struct</span> __rcu	<span class="token operator">*</span>parent<span class="token punctuation">;</span>
+
+	<span class="token comment">/*
+	 * Children/sibling form the list of natural children:
+	 */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		children<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		sibling<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_struct</span>		<span class="token operator">*</span>group_leader<span class="token punctuation">;</span>
+
+	<span class="token comment">/*
+	 * 'ptraced' is the list of tasks this task is using ptrace() on.
+	 *
+	 * This includes both natural children and PTRACE_ATTACH targets.
+	 * 'ptrace_entry' is this task's link on the p-&gt;parent-&gt;ptraced list.
+	 */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		ptraced<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		ptrace_entry<span class="token punctuation">;</span>
+
+	<span class="token comment">/* PID/PID hash table linkage. */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">pid</span>			<span class="token operator">*</span>thread_pid<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">hlist_node</span>		pid_links<span class="token punctuation">[</span>PIDTYPE_MAX<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		thread_group<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		thread_node<span class="token punctuation">;</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">completion</span>		<span class="token operator">*</span>vfork_done<span class="token punctuation">;</span>
+
+	<span class="token comment">/* CLONE_CHILD_SETTID: */</span>
+	<span class="token keyword">int</span> __user			<span class="token operator">*</span>set_child_tid<span class="token punctuation">;</span>
+
+	<span class="token comment">/* CLONE_CHILD_CLEARTID: */</span>
+	<span class="token keyword">int</span> __user			<span class="token operator">*</span>clear_child_tid<span class="token punctuation">;</span>
+
+	u64				utime<span class="token punctuation">;</span>
+	u64				stime<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_ARCH_HAS_SCALED_CPUTIME</span></span>
+	u64				utimescaled<span class="token punctuation">;</span>
+	u64				stimescaled<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	u64				gtime<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">prev_cputime</span>		prev_cputime<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_VIRT_CPU_ACCOUNTING_GEN</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">vtime</span>			vtime<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_NO_HZ_FULL</span></span>
+	<span class="token class-name">atomic_t</span>			tick_dep_mask<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token comment">/* Context switch counts: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			nvcsw<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			nivcsw<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Monotonic time in nsecs: */</span>
+	u64				start_time<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Boot based time in nsecs: */</span>
+	u64				start_boottime<span class="token punctuation">;</span>
+
+	<span class="token comment">/* MM fault and swap info: this can arguably be seen as either mm-specific or thread-specific: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			min_flt<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			maj_flt<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Empty if CONFIG_POSIX_CPUTIMERS=n */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">posix_cputimers</span>		posix_cputimers<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Process credentials: */</span>
+
+	<span class="token comment">/* Tracer's credentials at attach: */</span>
+	<span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">cred</span> __rcu		<span class="token operator">*</span>ptracer_cred<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Objective and real subjective task credentials (COW): */</span>
+	<span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">cred</span> __rcu		<span class="token operator">*</span>real_cred<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Effective (overridable) subjective task credentials (COW): */</span>
+	<span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">cred</span> __rcu		<span class="token operator">*</span>cred<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_KEYS</span></span>
+	<span class="token comment">/* Cached requested key. */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">key</span>			<span class="token operator">*</span>cached_requested_key<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+	<span class="token comment">/*
+	 * executable name, excluding path.
+	 *
+	 * - normally initialized setup_new_exec()
+	 * - access it with [gs]et_task_comm()
+	 * - lock it with task_lock()
+	 */</span>
+	<span class="token keyword">char</span>				comm<span class="token punctuation">[</span>TASK_COMM_LEN<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">nameidata</span>		<span class="token operator">*</span>nameidata<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_SYSVIPC</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">sysv_sem</span>			sysvsem<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">sysv_shm</span>			sysvshm<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_DETECT_HUNG_TASK</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			last_switch_count<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			last_switch_time<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token comment">/* Filesystem information: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">fs_struct</span>		<span class="token operator">*</span>fs<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Open file information: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">files_struct</span>		<span class="token operator">*</span>files<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Namespaces: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">nsproxy</span>			<span class="token operator">*</span>nsproxy<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Signal handlers: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">signal_struct</span>		<span class="token operator">*</span>signal<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">sighand_struct</span> __rcu		<span class="token operator">*</span>sighand<span class="token punctuation">;</span>
+	<span class="token class-name">sigset_t</span>			blocked<span class="token punctuation">;</span>
+	<span class="token class-name">sigset_t</span>			real_blocked<span class="token punctuation">;</span>
+	<span class="token comment">/* Restored if set_restore_sigmask() was used: */</span>
+	<span class="token class-name">sigset_t</span>			saved_sigmask<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">sigpending</span>		pending<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			sas_ss_sp<span class="token punctuation">;</span>
+	<span class="token class-name">size_t</span>				sas_ss_size<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			sas_ss_flags<span class="token punctuation">;</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">callback_head</span>		<span class="token operator">*</span>task_works<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_AUDIT</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_AUDITSYSCALL</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">audit_context</span>		<span class="token operator">*</span>audit_context<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token class-name">kuid_t</span>				loginuid<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			sessionid<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">seccomp</span>			seccomp<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Thread group tracking: */</span>
+	u64				parent_exec_id<span class="token punctuation">;</span>
+	u64				self_exec_id<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Protection against (de-)allocation: mm, files, fs, tty, keyrings, mems_allowed, mempolicy: */</span>
+	<span class="token class-name">spinlock_t</span>			alloc_lock<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Protection of the PI data structures: */</span>
+	<span class="token class-name">raw_spinlock_t</span>			pi_lock<span class="token punctuation">;</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">wake_q_node</span>		wake_q<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_RT_MUTEXES</span></span>
+	<span class="token comment">/* PI waiters blocked on a rt_mutex held by this task: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">rb_root_cached</span>		pi_waiters<span class="token punctuation">;</span>
+	<span class="token comment">/* Updated under owner's pi_lock and rq lock */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_struct</span>		<span class="token operator">*</span>pi_top_task<span class="token punctuation">;</span>
+	<span class="token comment">/* Deadlock detection and priority inheritance handling: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">rt_mutex_waiter</span>		<span class="token operator">*</span>pi_blocked_on<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_DEBUG_MUTEXES</span></span>
+	<span class="token comment">/* Mutex deadlock detection: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">mutex_waiter</span>		<span class="token operator">*</span>blocked_on<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_DEBUG_ATOMIC_SLEEP</span></span>
+	<span class="token keyword">int</span>				non_block_count<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_TRACE_IRQFLAGS</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			irq_events<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			hardirq_threaded<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			hardirq_enable_ip<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			hardirq_disable_ip<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			hardirq_enable_event<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			hardirq_disable_event<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				hardirqs_enabled<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				hardirq_context<span class="token punctuation">;</span>
+	u64				hardirq_chain_key<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			softirq_disable_ip<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			softirq_enable_ip<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			softirq_disable_event<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			softirq_enable_event<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				softirqs_enabled<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				softirq_context<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				irq_config<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_LOCKDEP</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span> <span class="token directive keyword">define</span> <span class="token macro-name">MAX_LOCK_DEPTH</span>			<span class="token expression"><span class="token number">48UL</span></span></span>
+	u64				curr_chain_key<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				lockdep_depth<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			lockdep_recursion<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">held_lock</span>		held_locks<span class="token punctuation">[</span>MAX_LOCK_DEPTH<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_UBSAN</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			in_ubsan<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+	<span class="token comment">/* Journalling filesystem info: */</span>
+	<span class="token keyword">void</span>				<span class="token operator">*</span>journal_info<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Stacked block device info: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">bio_list</span>			<span class="token operator">*</span>bio_list<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_BLOCK</span></span>
+	<span class="token comment">/* Stack plugging: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">blk_plug</span>			<span class="token operator">*</span>plug<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+	<span class="token comment">/* VM state: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">reclaim_state</span>		<span class="token operator">*</span>reclaim_state<span class="token punctuation">;</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">backing_dev_info</span>		<span class="token operator">*</span>backing_dev_info<span class="token punctuation">;</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">io_context</span>		<span class="token operator">*</span>io_context<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_COMPACTION</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">capture_control</span>		<span class="token operator">*</span>capture_control<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token comment">/* Ptrace state: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			ptrace_message<span class="token punctuation">;</span>
+	<span class="token class-name">kernel_siginfo_t</span>		<span class="token operator">*</span>last_siginfo<span class="token punctuation">;</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">task_io_accounting</span>	ioac<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_PSI</span></span>
+	<span class="token comment">/* Pressure stall state */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			psi_flags<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_TASK_XACCT</span></span>
+	<span class="token comment">/* Accumulated RSS usage: */</span>
+	u64				acct_rss_mem1<span class="token punctuation">;</span>
+	<span class="token comment">/* Accumulated virtual memory usage: */</span>
+	u64				acct_vm_mem1<span class="token punctuation">;</span>
+	<span class="token comment">/* stime + utime since last update: */</span>
+	u64				acct_timexpd<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_CPUSETS</span></span>
+	<span class="token comment">/* Protected by -&gt;alloc_lock: */</span>
+	<span class="token class-name">nodemask_t</span>			mems_allowed<span class="token punctuation">;</span>
+	<span class="token comment">/* Seqence number to catch updates: */</span>
+	<span class="token class-name">seqcount_t</span>			mems_allowed_seq<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				cpuset_mem_spread_rotor<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				cpuset_slab_spread_rotor<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_CGROUPS</span></span>
+	<span class="token comment">/* Control Group info protected by css_set_lock: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">css_set</span> __rcu		<span class="token operator">*</span>cgroups<span class="token punctuation">;</span>
+	<span class="token comment">/* cg_list protected by css_set_lock and tsk-&gt;alloc_lock: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		cg_list<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_X86_CPU_RESCTRL</span></span>
+	u32				closid<span class="token punctuation">;</span>
+	u32				rmid<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_FUTEX</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">robust_list_head</span> __user	<span class="token operator">*</span>robust_list<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_COMPAT</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">compat_robust_list_head</span> __user <span class="token operator">*</span>compat_robust_list<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		pi_state_list<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">futex_pi_state</span>		<span class="token operator">*</span>pi_state_cache<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">mutex</span>			futex_exit_mutex<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			futex_state<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_PERF_EVENTS</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">perf_event_context</span>	<span class="token operator">*</span>perf_event_ctxp<span class="token punctuation">[</span>perf_nr_task_contexts<span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">mutex</span>			perf_event_mutex<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">list_head</span>		perf_event_list<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_DEBUG_PREEMPT</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			preempt_disable_ip<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_NUMA</span></span>
+	<span class="token comment">/* Protected by alloc_lock: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">mempolicy</span>		<span class="token operator">*</span>mempolicy<span class="token punctuation">;</span>
+	<span class="token keyword">short</span>				il_prev<span class="token punctuation">;</span>
+	<span class="token keyword">short</span>				pref_node_fork<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_NUMA_BALANCING</span></span>
+	<span class="token keyword">int</span>				numa_scan_seq<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			numa_scan_period<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			numa_scan_period_max<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				numa_preferred_nid<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			numa_migrate_retry<span class="token punctuation">;</span>
+	<span class="token comment">/* Migration stamp: */</span>
+	u64				node_stamp<span class="token punctuation">;</span>
+	u64				last_task_numa_placement<span class="token punctuation">;</span>
+	u64				last_sum_exec_runtime<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">callback_head</span>		numa_work<span class="token punctuation">;</span>
+
+	<span class="token comment">/*
+	 * This pointer is only modified for current in syscall and
+	 * pagefault context (and for tasks being destroyed), so it can be read
+	 * from any of the following contexts:
+	 *  - RCU read-side critical section
+	 *  - current-&gt;numa_group from everywhere
+	 *  - task's runqueue locked, task not running
+	 */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">numa_group</span> __rcu		<span class="token operator">*</span>numa_group<span class="token punctuation">;</span>
+
+	<span class="token comment">/*
+	 * numa_faults is an array split into four regions:
+	 * faults_memory, faults_cpu, faults_memory_buffer, faults_cpu_buffer
+	 * in this precise order.
+	 *
+	 * faults_memory: Exponential decaying average of faults on a per-node
+	 * basis. Scheduling placement decisions are made based on these
+	 * counts. The values remain static for the duration of a PTE scan.
+	 * faults_cpu: Track the nodes the process was running on when a NUMA
+	 * hinting fault was incurred.
+	 * faults_memory_buffer and faults_cpu_buffer: Record faults per node
+	 * during the current scan window. When the scan completes, the counts
+	 * in faults_memory and faults_cpu decay and these values are copied.
+	 */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			<span class="token operator">*</span>numa_faults<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			total_numa_faults<span class="token punctuation">;</span>
+
+	<span class="token comment">/*
+	 * numa_faults_locality tracks if faults recorded during the last
+	 * scan window were remote/local or failed to migrate. The task scan
+	 * period is adapted based on the locality of the faults with different
+	 * weights depending on whether they were shared or private faults
+	 */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			numa_faults_locality<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			numa_pages_migrated<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">/* CONFIG_NUMA_BALANCING */</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_RSEQ</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">rseq</span> __user <span class="token operator">*</span>rseq<span class="token punctuation">;</span>
+	u32 rseq_sig<span class="token punctuation">;</span>
+	<span class="token comment">/*
+	 * RmW on rseq_event_mask must be performed atomically
+	 * with respect to preemption.
+	 */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> rseq_event_mask<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">tlbflush_unmap_batch</span>	tlb_ubc<span class="token punctuation">;</span>
+
+	<span class="token keyword">union</span> <span class="token punctuation">{</span>
+		<span class="token class-name">refcount_t</span>		rcu_users<span class="token punctuation">;</span>
+		<span class="token keyword">struct</span> <span class="token class-name">rcu_head</span>		rcu<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/* Cache last used pipe for splice(): */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">pipe_inode_info</span>		<span class="token operator">*</span>splice_pipe<span class="token punctuation">;</span>
+
+	<span class="token keyword">struct</span> <span class="token class-name">page_frag</span>		task_frag<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_TASK_DELAY_ACCT</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_delay_info</span>		<span class="token operator">*</span>delays<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_FAULT_INJECTION</span></span>
+	<span class="token keyword">int</span>				make_it_fail<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			fail_nth<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token comment">/*
+	 * When (nr_dirtied &gt;= nr_dirtied_pause), it's time to call
+	 * balance_dirty_pages() for a dirty throttling pause:
+	 */</span>
+	<span class="token keyword">int</span>				nr_dirtied<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				nr_dirtied_pause<span class="token punctuation">;</span>
+	<span class="token comment">/* Start of a write-and-pause period: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			dirty_paused_when<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_LATENCYTOP</span></span>
+	<span class="token keyword">int</span>				latency_record_count<span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">latency_record</span>		latency_record<span class="token punctuation">[</span>LT_SAVECOUNT<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token comment">/*
+	 * Time slack values; these are used to round up poll() and
+	 * select() etc timeout values. These are in nanoseconds.
+	 */</span>
+	u64				timer_slack_ns<span class="token punctuation">;</span>
+	u64				default_timer_slack_ns<span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_KASAN</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			kasan_depth<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_KCSAN</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">kcsan_ctx</span>		kcsan_ctx<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_FUNCTION_GRAPH_TRACER</span></span>
+	<span class="token comment">/* Index of current stored address in ret_stack: */</span>
+	<span class="token keyword">int</span>				curr_ret_stack<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				curr_ret_depth<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Stack of return addresses for return function tracing: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">ftrace_ret_stack</span>		<span class="token operator">*</span>ret_stack<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Timestamp for last schedule: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token keyword">long</span>		ftrace_timestamp<span class="token punctuation">;</span>
+
+	<span class="token comment">/*
+	 * Number of functions that haven't been traced
+	 * because of depth overrun:
+	 */</span>
+	<span class="token class-name">atomic_t</span>			trace_overrun<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Pause tracing: */</span>
+	<span class="token class-name">atomic_t</span>			tracing_graph_pause<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_TRACING</span></span>
+	<span class="token comment">/* State flags for use by tracers: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			trace<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Bitmask and counter of trace recursion: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			trace_recursion<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">/* CONFIG_TRACING */</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_KCOV</span></span>
+	<span class="token comment">/* See kernel/kcov.c for more details. */</span>
+
+	<span class="token comment">/* Coverage collection mode enabled for this task (0 if disabled): */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			kcov_mode<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Size of the kcov_area: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			kcov_size<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Buffer for coverage collection: */</span>
+	<span class="token keyword">void</span>				<span class="token operator">*</span>kcov_area<span class="token punctuation">;</span>
+
+	<span class="token comment">/* KCOV descriptor wired with this task or NULL: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">kcov</span>			<span class="token operator">*</span>kcov<span class="token punctuation">;</span>
+
+	<span class="token comment">/* KCOV common handle for remote coverage collection: */</span>
+	u64				kcov_handle<span class="token punctuation">;</span>
+
+	<span class="token comment">/* KCOV sequence number: */</span>
+	<span class="token keyword">int</span>				kcov_sequence<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Collect coverage from softirq context: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			kcov_softirq<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_MEMCG</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">mem_cgroup</span>		<span class="token operator">*</span>memcg_in_oom<span class="token punctuation">;</span>
+	<span class="token class-name">gfp_t</span>				memcg_oom_gfp_mask<span class="token punctuation">;</span>
+	<span class="token keyword">int</span>				memcg_oom_order<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Number of pages to reclaim on returning to userland: */</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			memcg_nr_pages_over_high<span class="token punctuation">;</span>
+
+	<span class="token comment">/* Used by memcontrol for targeted memcg charge: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">mem_cgroup</span>		<span class="token operator">*</span>active_memcg<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_BLK_CGROUP</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">request_queue</span>		<span class="token operator">*</span>throttle_queue<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_UPROBES</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">uprobe_task</span>		<span class="token operator">*</span>utask<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression"><span class="token function">defined</span><span class="token punctuation">(</span>CONFIG_BCACHE<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token function">defined</span><span class="token punctuation">(</span>CONFIG_BCACHE_MODULE<span class="token punctuation">)</span></span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			sequential_io<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span>			sequential_io_avg<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_DEBUG_ATOMIC_SLEEP</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			task_state_change<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	<span class="token keyword">int</span>				pagefault_disabled<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_MMU</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">task_struct</span>		<span class="token operator">*</span>oom_reaper_list<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_VMAP_STACK</span></span>
+	<span class="token keyword">struct</span> <span class="token class-name">vm_struct</span>		<span class="token operator">*</span>stack_vm_area<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_THREAD_INFO_IN_TASK</span></span>
+	<span class="token comment">/* A live task holds one reference: */</span>
+	<span class="token class-name">refcount_t</span>			stack_refcount<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_LIVEPATCH</span></span>
+	<span class="token keyword">int</span> patch_state<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_SECURITY</span></span>
+	<span class="token comment">/* Used by LSM modules for access restriction: */</span>
+	<span class="token keyword">void</span>				<span class="token operator">*</span>security<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_GCC_PLUGIN_STACKLEAK</span></span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			lowest_stack<span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">long</span>			prev_lowest_stack<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_X86_MCE</span></span>
+	u64				mce_addr<span class="token punctuation">;</span>
+	__u64				mce_ripv <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+					mce_whole_page <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+					__mce_reserved <span class="token operator">:</span> <span class="token number">62</span><span class="token punctuation">;</span>
+	<span class="token keyword">struct</span> <span class="token class-name">callback_head</span>		mce_kill_me<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+	<span class="token comment">/*
+	 * New fields for task_struct should be added above here, so that
+	 * they are included in the randomized portion of task_struct.
+	 */</span>
+	randomized_struct_fields_end
+
+	<span class="token comment">/* CPU-specific state of this task: */</span>
+	<span class="token keyword">struct</span> <span class="token class-name">thread_struct</span>		thread<span class="token punctuation">;</span>
+
+	<span class="token comment">/*
+	 * WARNING: on x86, 'thread_struct' contains a variable-sized
+	 * structure.  It *MUST* be at the end of 'task_struct'.
+	 *
+	 * Do not put anything below here!
+	 */</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br><span class="line-number">122</span><br><span class="line-number">123</span><br><span class="line-number">124</span><br><span class="line-number">125</span><br><span class="line-number">126</span><br><span class="line-number">127</span><br><span class="line-number">128</span><br><span class="line-number">129</span><br><span class="line-number">130</span><br><span class="line-number">131</span><br><span class="line-number">132</span><br><span class="line-number">133</span><br><span class="line-number">134</span><br><span class="line-number">135</span><br><span class="line-number">136</span><br><span class="line-number">137</span><br><span class="line-number">138</span><br><span class="line-number">139</span><br><span class="line-number">140</span><br><span class="line-number">141</span><br><span class="line-number">142</span><br><span class="line-number">143</span><br><span class="line-number">144</span><br><span class="line-number">145</span><br><span class="line-number">146</span><br><span class="line-number">147</span><br><span class="line-number">148</span><br><span class="line-number">149</span><br><span class="line-number">150</span><br><span class="line-number">151</span><br><span class="line-number">152</span><br><span class="line-number">153</span><br><span class="line-number">154</span><br><span class="line-number">155</span><br><span class="line-number">156</span><br><span class="line-number">157</span><br><span class="line-number">158</span><br><span class="line-number">159</span><br><span class="line-number">160</span><br><span class="line-number">161</span><br><span class="line-number">162</span><br><span class="line-number">163</span><br><span class="line-number">164</span><br><span class="line-number">165</span><br><span class="line-number">166</span><br><span class="line-number">167</span><br><span class="line-number">168</span><br><span class="line-number">169</span><br><span class="line-number">170</span><br><span class="line-number">171</span><br><span class="line-number">172</span><br><span class="line-number">173</span><br><span class="line-number">174</span><br><span class="line-number">175</span><br><span class="line-number">176</span><br><span class="line-number">177</span><br><span class="line-number">178</span><br><span class="line-number">179</span><br><span class="line-number">180</span><br><span class="line-number">181</span><br><span class="line-number">182</span><br><span class="line-number">183</span><br><span class="line-number">184</span><br><span class="line-number">185</span><br><span class="line-number">186</span><br><span class="line-number">187</span><br><span class="line-number">188</span><br><span class="line-number">189</span><br><span class="line-number">190</span><br><span class="line-number">191</span><br><span class="line-number">192</span><br><span class="line-number">193</span><br><span class="line-number">194</span><br><span class="line-number">195</span><br><span class="line-number">196</span><br><span class="line-number">197</span><br><span class="line-number">198</span><br><span class="line-number">199</span><br><span class="line-number">200</span><br><span class="line-number">201</span><br><span class="line-number">202</span><br><span class="line-number">203</span><br><span class="line-number">204</span><br><span class="line-number">205</span><br><span class="line-number">206</span><br><span class="line-number">207</span><br><span class="line-number">208</span><br><span class="line-number">209</span><br><span class="line-number">210</span><br><span class="line-number">211</span><br><span class="line-number">212</span><br><span class="line-number">213</span><br><span class="line-number">214</span><br><span class="line-number">215</span><br><span class="line-number">216</span><br><span class="line-number">217</span><br><span class="line-number">218</span><br><span class="line-number">219</span><br><span class="line-number">220</span><br><span class="line-number">221</span><br><span class="line-number">222</span><br><span class="line-number">223</span><br><span class="line-number">224</span><br><span class="line-number">225</span><br><span class="line-number">226</span><br><span class="line-number">227</span><br><span class="line-number">228</span><br><span class="line-number">229</span><br><span class="line-number">230</span><br><span class="line-number">231</span><br><span class="line-number">232</span><br><span class="line-number">233</span><br><span class="line-number">234</span><br><span class="line-number">235</span><br><span class="line-number">236</span><br><span class="line-number">237</span><br><span class="line-number">238</span><br><span class="line-number">239</span><br><span class="line-number">240</span><br><span class="line-number">241</span><br><span class="line-number">242</span><br><span class="line-number">243</span><br><span class="line-number">244</span><br><span class="line-number">245</span><br><span class="line-number">246</span><br><span class="line-number">247</span><br><span class="line-number">248</span><br><span class="line-number">249</span><br><span class="line-number">250</span><br><span class="line-number">251</span><br><span class="line-number">252</span><br><span class="line-number">253</span><br><span class="line-number">254</span><br><span class="line-number">255</span><br><span class="line-number">256</span><br><span class="line-number">257</span><br><span class="line-number">258</span><br><span class="line-number">259</span><br><span class="line-number">260</span><br><span class="line-number">261</span><br><span class="line-number">262</span><br><span class="line-number">263</span><br><span class="line-number">264</span><br><span class="line-number">265</span><br><span class="line-number">266</span><br><span class="line-number">267</span><br><span class="line-number">268</span><br><span class="line-number">269</span><br><span class="line-number">270</span><br><span class="line-number">271</span><br><span class="line-number">272</span><br><span class="line-number">273</span><br><span class="line-number">274</span><br><span class="line-number">275</span><br><span class="line-number">276</span><br><span class="line-number">277</span><br><span class="line-number">278</span><br><span class="line-number">279</span><br><span class="line-number">280</span><br><span class="line-number">281</span><br><span class="line-number">282</span><br><span class="line-number">283</span><br><span class="line-number">284</span><br><span class="line-number">285</span><br><span class="line-number">286</span><br><span class="line-number">287</span><br><span class="line-number">288</span><br><span class="line-number">289</span><br><span class="line-number">290</span><br><span class="line-number">291</span><br><span class="line-number">292</span><br><span class="line-number">293</span><br><span class="line-number">294</span><br><span class="line-number">295</span><br><span class="line-number">296</span><br><span class="line-number">297</span><br><span class="line-number">298</span><br><span class="line-number">299</span><br><span class="line-number">300</span><br><span class="line-number">301</span><br><span class="line-number">302</span><br><span class="line-number">303</span><br><span class="line-number">304</span><br><span class="line-number">305</span><br><span class="line-number">306</span><br><span class="line-number">307</span><br><span class="line-number">308</span><br><span class="line-number">309</span><br><span class="line-number">310</span><br><span class="line-number">311</span><br><span class="line-number">312</span><br><span class="line-number">313</span><br><span class="line-number">314</span><br><span class="line-number">315</span><br><span class="line-number">316</span><br><span class="line-number">317</span><br><span class="line-number">318</span><br><span class="line-number">319</span><br><span class="line-number">320</span><br><span class="line-number">321</span><br><span class="line-number">322</span><br><span class="line-number">323</span><br><span class="line-number">324</span><br><span class="line-number">325</span><br><span class="line-number">326</span><br><span class="line-number">327</span><br><span class="line-number">328</span><br><span class="line-number">329</span><br><span class="line-number">330</span><br><span class="line-number">331</span><br><span class="line-number">332</span><br><span class="line-number">333</span><br><span class="line-number">334</span><br><span class="line-number">335</span><br><span class="line-number">336</span><br><span class="line-number">337</span><br><span class="line-number">338</span><br><span class="line-number">339</span><br><span class="line-number">340</span><br><span class="line-number">341</span><br><span class="line-number">342</span><br><span class="line-number">343</span><br><span class="line-number">344</span><br><span class="line-number">345</span><br><span class="line-number">346</span><br><span class="line-number">347</span><br><span class="line-number">348</span><br><span class="line-number">349</span><br><span class="line-number">350</span><br><span class="line-number">351</span><br><span class="line-number">352</span><br><span class="line-number">353</span><br><span class="line-number">354</span><br><span class="line-number">355</span><br><span class="line-number">356</span><br><span class="line-number">357</span><br><span class="line-number">358</span><br><span class="line-number">359</span><br><span class="line-number">360</span><br><span class="line-number">361</span><br><span class="line-number">362</span><br><span class="line-number">363</span><br><span class="line-number">364</span><br><span class="line-number">365</span><br><span class="line-number">366</span><br><span class="line-number">367</span><br><span class="line-number">368</span><br><span class="line-number">369</span><br><span class="line-number">370</span><br><span class="line-number">371</span><br><span class="line-number">372</span><br><span class="line-number">373</span><br><span class="line-number">374</span><br><span class="line-number">375</span><br><span class="line-number">376</span><br><span class="line-number">377</span><br><span class="line-number">378</span><br><span class="line-number">379</span><br><span class="line-number">380</span><br><span class="line-number">381</span><br><span class="line-number">382</span><br><span class="line-number">383</span><br><span class="line-number">384</span><br><span class="line-number">385</span><br><span class="line-number">386</span><br><span class="line-number">387</span><br><span class="line-number">388</span><br><span class="line-number">389</span><br><span class="line-number">390</span><br><span class="line-number">391</span><br><span class="line-number">392</span><br><span class="line-number">393</span><br><span class="line-number">394</span><br><span class="line-number">395</span><br><span class="line-number">396</span><br><span class="line-number">397</span><br><span class="line-number">398</span><br><span class="line-number">399</span><br><span class="line-number">400</span><br><span class="line-number">401</span><br><span class="line-number">402</span><br><span class="line-number">403</span><br><span class="line-number">404</span><br><span class="line-number">405</span><br><span class="line-number">406</span><br><span class="line-number">407</span><br><span class="line-number">408</span><br><span class="line-number">409</span><br><span class="line-number">410</span><br><span class="line-number">411</span><br><span class="line-number">412</span><br><span class="line-number">413</span><br><span class="line-number">414</span><br><span class="line-number">415</span><br><span class="line-number">416</span><br><span class="line-number">417</span><br><span class="line-number">418</span><br><span class="line-number">419</span><br><span class="line-number">420</span><br><span class="line-number">421</span><br><span class="line-number">422</span><br><span class="line-number">423</span><br><span class="line-number">424</span><br><span class="line-number">425</span><br><span class="line-number">426</span><br><span class="line-number">427</span><br><span class="line-number">428</span><br><span class="line-number">429</span><br><span class="line-number">430</span><br><span class="line-number">431</span><br><span class="line-number">432</span><br><span class="line-number">433</span><br><span class="line-number">434</span><br><span class="line-number">435</span><br><span class="line-number">436</span><br><span class="line-number">437</span><br><span class="line-number">438</span><br><span class="line-number">439</span><br><span class="line-number">440</span><br><span class="line-number">441</span><br><span class="line-number">442</span><br><span class="line-number">443</span><br><span class="line-number">444</span><br><span class="line-number">445</span><br><span class="line-number">446</span><br><span class="line-number">447</span><br><span class="line-number">448</span><br><span class="line-number">449</span><br><span class="line-number">450</span><br><span class="line-number">451</span><br><span class="line-number">452</span><br><span class="line-number">453</span><br><span class="line-number">454</span><br><span class="line-number">455</span><br><span class="line-number">456</span><br><span class="line-number">457</span><br><span class="line-number">458</span><br><span class="line-number">459</span><br><span class="line-number">460</span><br><span class="line-number">461</span><br><span class="line-number">462</span><br><span class="line-number">463</span><br><span class="line-number">464</span><br><span class="line-number">465</span><br><span class="line-number">466</span><br><span class="line-number">467</span><br><span class="line-number">468</span><br><span class="line-number">469</span><br><span class="line-number">470</span><br><span class="line-number">471</span><br><span class="line-number">472</span><br><span class="line-number">473</span><br><span class="line-number">474</span><br><span class="line-number">475</span><br><span class="line-number">476</span><br><span class="line-number">477</span><br><span class="line-number">478</span><br><span class="line-number">479</span><br><span class="line-number">480</span><br><span class="line-number">481</span><br><span class="line-number">482</span><br><span class="line-number">483</span><br><span class="line-number">484</span><br><span class="line-number">485</span><br><span class="line-number">486</span><br><span class="line-number">487</span><br><span class="line-number">488</span><br><span class="line-number">489</span><br><span class="line-number">490</span><br><span class="line-number">491</span><br><span class="line-number">492</span><br><span class="line-number">493</span><br><span class="line-number">494</span><br><span class="line-number">495</span><br><span class="line-number">496</span><br><span class="line-number">497</span><br><span class="line-number">498</span><br><span class="line-number">499</span><br><span class="line-number">500</span><br><span class="line-number">501</span><br><span class="line-number">502</span><br><span class="line-number">503</span><br><span class="line-number">504</span><br><span class="line-number">505</span><br><span class="line-number">506</span><br><span class="line-number">507</span><br><span class="line-number">508</span><br><span class="line-number">509</span><br><span class="line-number">510</span><br><span class="line-number">511</span><br><span class="line-number">512</span><br><span class="line-number">513</span><br><span class="line-number">514</span><br><span class="line-number">515</span><br><span class="line-number">516</span><br><span class="line-number">517</span><br><span class="line-number">518</span><br><span class="line-number">519</span><br><span class="line-number">520</span><br><span class="line-number">521</span><br><span class="line-number">522</span><br><span class="line-number">523</span><br><span class="line-number">524</span><br><span class="line-number">525</span><br><span class="line-number">526</span><br><span class="line-number">527</span><br><span class="line-number">528</span><br><span class="line-number">529</span><br><span class="line-number">530</span><br><span class="line-number">531</span><br><span class="line-number">532</span><br><span class="line-number">533</span><br><span class="line-number">534</span><br><span class="line-number">535</span><br><span class="line-number">536</span><br><span class="line-number">537</span><br><span class="line-number">538</span><br><span class="line-number">539</span><br><span class="line-number">540</span><br><span class="line-number">541</span><br><span class="line-number">542</span><br><span class="line-number">543</span><br><span class="line-number">544</span><br><span class="line-number">545</span><br><span class="line-number">546</span><br><span class="line-number">547</span><br><span class="line-number">548</span><br><span class="line-number">549</span><br><span class="line-number">550</span><br><span class="line-number">551</span><br><span class="line-number">552</span><br><span class="line-number">553</span><br><span class="line-number">554</span><br><span class="line-number">555</span><br><span class="line-number">556</span><br><span class="line-number">557</span><br><span class="line-number">558</span><br><span class="line-number">559</span><br><span class="line-number">560</span><br><span class="line-number">561</span><br><span class="line-number">562</span><br><span class="line-number">563</span><br><span class="line-number">564</span><br><span class="line-number">565</span><br><span class="line-number">566</span><br><span class="line-number">567</span><br><span class="line-number">568</span><br><span class="line-number">569</span><br><span class="line-number">570</span><br><span class="line-number">571</span><br><span class="line-number">572</span><br><span class="line-number">573</span><br><span class="line-number">574</span><br><span class="line-number">575</span><br><span class="line-number">576</span><br><span class="line-number">577</span><br><span class="line-number">578</span><br><span class="line-number">579</span><br><span class="line-number">580</span><br><span class="line-number">581</span><br><span class="line-number">582</span><br><span class="line-number">583</span><br><span class="line-number">584</span><br><span class="line-number">585</span><br><span class="line-number">586</span><br><span class="line-number">587</span><br><span class="line-number">588</span><br><span class="line-number">589</span><br><span class="line-number">590</span><br><span class="line-number">591</span><br><span class="line-number">592</span><br><span class="line-number">593</span><br><span class="line-number">594</span><br><span class="line-number">595</span><br><span class="line-number">596</span><br><span class="line-number">597</span><br><span class="line-number">598</span><br><span class="line-number">599</span><br><span class="line-number">600</span><br><span class="line-number">601</span><br><span class="line-number">602</span><br><span class="line-number">603</span><br><span class="line-number">604</span><br><span class="line-number">605</span><br><span class="line-number">606</span><br><span class="line-number">607</span><br><span class="line-number">608</span><br><span class="line-number">609</span><br><span class="line-number">610</span><br><span class="line-number">611</span><br><span class="line-number">612</span><br><span class="line-number">613</span><br><span class="line-number">614</span><br><span class="line-number">615</span><br><span class="line-number">616</span><br><span class="line-number">617</span><br><span class="line-number">618</span><br><span class="line-number">619</span><br><span class="line-number">620</span><br><span class="line-number">621</span><br><span class="line-number">622</span><br><span class="line-number">623</span><br><span class="line-number">624</span><br><span class="line-number">625</span><br><span class="line-number">626</span><br><span class="line-number">627</span><br><span class="line-number">628</span><br><span class="line-number">629</span><br><span class="line-number">630</span><br><span class="line-number">631</span><br><span class="line-number">632</span><br><span class="line-number">633</span><br><span class="line-number">634</span><br><span class="line-number">635</span><br><span class="line-number">636</span><br><span class="line-number">637</span><br><span class="line-number">638</span><br><span class="line-number">639</span><br><span class="line-number">640</span><br><span class="line-number">641</span><br><span class="line-number">642</span><br><span class="line-number">643</span><br><span class="line-number">644</span><br><span class="line-number">645</span><br><span class="line-number">646</span><br><span class="line-number">647</span><br><span class="line-number">648</span><br><span class="line-number">649</span><br><span class="line-number">650</span><br><span class="line-number">651</span><br><span class="line-number">652</span><br><span class="line-number">653</span><br><span class="line-number">654</span><br><span class="line-number">655</span><br><span class="line-number">656</span><br><span class="line-number">657</span><br><span class="line-number">658</span><br><span class="line-number">659</span><br><span class="line-number">660</span><br><span class="line-number">661</span><br><span class="line-number">662</span><br><span class="line-number">663</span><br><span class="line-number">664</span><br><span class="line-number">665</span><br><span class="line-number">666</span><br><span class="line-number">667</span><br><span class="line-number">668</span><br><span class="line-number">669</span><br><span class="line-number">670</span><br><span class="line-number">671</span><br><span class="line-number">672</span><br><span class="line-number">673</span><br><span class="line-number">674</span><br><span class="line-number">675</span><br><span class="line-number">676</span><br><span class="line-number">677</span><br><span class="line-number">678</span><br><span class="line-number">679</span><br><span class="line-number">680</span><br><span class="line-number">681</span><br><span class="line-number">682</span><br><span class="line-number">683</span><br><span class="line-number">684</span><br><span class="line-number">685</span><br><span class="line-number">686</span><br><span class="line-number">687</span><br><span class="line-number">688</span><br><span class="line-number">689</span><br><span class="line-number">690</span><br><span class="line-number">691</span><br><span class="line-number">692</span><br><span class="line-number">693</span><br><span class="line-number">694</span><br><span class="line-number">695</span><br><span class="line-number">696</span><br><span class="line-number">697</span><br><span class="line-number">698</span><br><span class="line-number">699</span><br></div></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新:</span> <span class="time">7/22/2020, 3:16:08 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/m/深度好文/深度好文|记录一次服务器登录问题排查.html" class="prev">
+        记录一次服务器登录问题排查
+      </a></span> <span class="next"><a href="/m/漫步Linux/awk.html">
+        awk
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"><!----></div></div>
+    <script src="/m/assets/js/app.71fdaff2.js" defer></script><script src="/m/assets/js/2.351ead77.js" defer></script><script src="/m/assets/js/161.4832768d.js" defer></script>
+  </body>
+</html>
